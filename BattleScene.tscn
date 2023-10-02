@@ -1,0 +1,93 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgodfbrkgmwly"]
+
+[ext_resource type="Script" path="res://TurnManager.gd" id="1_7c1od"]
+[ext_resource type="PackedScene" uid="uid://carssq27wmr3" path="res://character.tscn" id="1_ymmig"]
+[ext_resource type="Texture2D" uid="uid://dqnkygxyeio3f" path="res://Sprites/Dragon.png" id="3_js6lc"]
+[ext_resource type="Resource" uid="uid://y01vsy4kvx3y" path="res://Combat Actions/Slash.tres" id="3_k5dcx"]
+[ext_resource type="Texture2D" uid="uid://dva1rdjjkests" path="res://Sprites/Reptile.png" id="4_dunjk"]
+[ext_resource type="Resource" uid="uid://cwhfpkn4e7ycc" path="res://Combat Actions/Stomp.tres" id="4_spjqy"]
+[ext_resource type="Resource" uid="uid://5iafwwqslyg4" path="res://Combat Actions/Heal.tres" id="5_dltr8"]
+[ext_resource type="Script" path="res://CombatActionButton.gd" id="8_55hw5"]
+[ext_resource type="Script" path="res://PlayerUI.gd" id="8_llnrn"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jgd1i"]
+font_size = 25
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_adi7t"]
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="BattleScene" type="Node2D" node_paths=PackedStringArray("player_character", "enemy_character")]
+script = ExtResource("1_7c1od")
+player_character = NodePath("Player")
+enemy_character = NodePath("Enemy")
+
+[node name="Player" parent="." node_paths=PackedStringArray("opponent") instance=ExtResource("1_ymmig")]
+position = Vector2(-276, -66)
+is_player = true
+combat_actions = [ExtResource("3_k5dcx"), ExtResource("4_spjqy"), ExtResource("5_dltr8")]
+opponent = NodePath("../Enemy")
+visual = ExtResource("3_js6lc")
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("opponent") instance=ExtResource("1_ymmig")]
+position = Vector2(268, -67)
+combat_actions = [ExtResource("5_dltr8"), ExtResource("3_k5dcx")]
+opponent = NodePath("../Player")
+visual = ExtResource("4_dunjk")
+flip_visual = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
+
+[node name="PlayerCombatActions" type="VBoxContainer" parent="."]
+visible = false
+offset_left = -371.0
+offset_top = 60.0
+offset_right = -171.0
+offset_bottom = 197.0
+script = ExtResource("8_llnrn")
+buttons = [NodePath("CombatAction"), NodePath("CombatAction2"), NodePath("CombatAction3")]
+
+[node name="CombatAction" type="Button" parent="PlayerCombatActions"]
+layout_mode = 2
+text = "Slash (5 DMG)"
+script = ExtResource("8_55hw5")
+
+[node name="CombatAction2" type="Button" parent="PlayerCombatActions"]
+layout_mode = 2
+text = "Slash (5 DMG)"
+script = ExtResource("8_55hw5")
+
+[node name="CombatAction3" type="Button" parent="PlayerCombatActions"]
+layout_mode = 2
+text = "Slash (5 DMG)"
+script = ExtResource("8_55hw5")
+
+[node name="EndBanner" type="Label" parent="."]
+visible = false
+offset_left = -100.0
+offset_top = -187.0
+offset_right = 98.0
+offset_bottom = -125.0
+text = "You Win!"
+label_settings = SubResource("LabelSettings_jgd1i")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BattleLog" type="Label" parent="."]
+visible = false
+offset_left = -150.0
+offset_top = 66.0
+offset_right = 149.0
+offset_bottom = 112.0
+text = "Player used slash for 5 damage"
+label_settings = SubResource("LabelSettings_adi7t")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="PlayerCombatActions/CombatAction" to="PlayerCombatActions/CombatAction" method="_on_pressed"]
+[connection signal="pressed" from="PlayerCombatActions/CombatAction2" to="PlayerCombatActions/CombatAction2" method="_on_pressed"]
+[connection signal="pressed" from="PlayerCombatActions/CombatAction3" to="PlayerCombatActions/CombatAction3" method="_on_pressed"]
