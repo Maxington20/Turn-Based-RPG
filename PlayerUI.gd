@@ -13,7 +13,7 @@ func _on_character_begin_turn(character):
 	if character.is_player:
 		_display_combat_actions(character.combat_actions)
 	
-func _on_character_end_turn(character):
+func _on_character_end_turn(_character):
 	visible = false
 	
 func _display_combat_actions (combat_actions):
